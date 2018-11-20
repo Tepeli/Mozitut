@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-
+var moment = require('moment');
 var Schema = mongoose.Schema;
 
 var AuthorSchema = new Schema(
@@ -22,7 +22,13 @@ AuthorSchema
 AuthorSchema
 .virtual('lifespan')
 .get(function () {
-  return (this.date_of_death.getYear() - this.date_of_birth.getYear()).toString();
+  var b = moment(this.date_of_birth).format('MMMM Do, YYYY').toString();
+  var d = moment(this.date_of_death).format('MMMM Do, YYYY').toString();
+  var toReturn = b;
+  if (this.date_of_death) {
+    toReturn = b + " - " + d;
+  }
+  return toReturn;
 });
 
 // Virtual for author's URL
